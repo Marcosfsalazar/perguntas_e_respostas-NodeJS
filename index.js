@@ -1,6 +1,18 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const connection = require('./database/database')
+
+//database
+
+connection
+        .authenticate()
+        .then(()=>{
+            console.log("successful connection!")
+        })
+        .catch((err)=>{
+            console.log("Error:" + err)
+        })
 
 //port
 const port = 4200
