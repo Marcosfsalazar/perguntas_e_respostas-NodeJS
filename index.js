@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const connection = require('./database/database')
+const Question = require("./database/Question")
 
 //database
 
@@ -27,7 +28,13 @@ app.use(bodyParser.json())
 
 //routes
 app.get("/",(req,res)=>{
-    res.render("index")
+    Question.findAll({raw:true,order:[ //raw = dados crus, oder = ordenados pelos parâmetros passados
+        ['id','DESC']
+    ]}).then((questions)=>{
+        res.render("index",{
+            questions
+        })
+    });
 })
 
 app.get("/ask",(req,res)=>{
@@ -37,7 +44,27 @@ app.get("/ask",(req,res)=>{
 app.post("/saveform",(req,res)=>{
     let title = req.body.title;
     let question = req.body.question;
-    res.send("form received!<br> title: " + title +"<br>question: " + question)
+    
+    Question.create({
+        title: title,
+        question: question
+    })//insert into
+    .then(()=>{
+        res.redirect("/")
+    })
+})
+
+app.get("/question/:id",(req,res)=>{
+    let id = req.params.id;
+    Question.findOne({
+        where:{id: id}
+    }).then(question =>{
+        if(question != undefined){
+            res.render("question")
+        }else{
+            res.redirect("/")
+        }
+    })
 })
 
 app.listen(port,()=>{
