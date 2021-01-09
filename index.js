@@ -3,6 +3,8 @@ const app = express();
 const bodyParser = require("body-parser");
 const connection = require('./database/database')
 const Question = require("./database/Question")
+const Answer = require("./database/Answer");
+const { render } = require("ejs");
 
 //database
 
@@ -18,6 +20,10 @@ connection
 //port
 const port = 4200
 
+//gamb
+const ACTIVE = 'active';
+const INACTIVE = '';
+
 //view engine
 app.set('view engine','ejs')
 app.use(express.static('public'))
@@ -32,17 +38,22 @@ app.get("/",(req,res)=>{
         ['id','DESC']
     ]}).then((questions)=>{
         res.render("index",{
-            questions
+            questions,
+            activeAsk: INACTIVE,
+            activeHome: ACTIVE
         })
     });
 })
 
 app.get("/ask",(req,res)=>{
-    res.render('ask');
+    res.render('ask',{
+        activeAsk: ACTIVE,
+        activeHome: INACTIVE
+    });
 })
 
 app.post("/saveform",(req,res)=>{
-    let title = req.body.title;
+    let title = req.body.title; //recebendo o post com bodyparser
     let question = req.body.question;
     
     Question.create({
@@ -60,10 +71,33 @@ app.get("/question/:id",(req,res)=>{
         where:{id: id}
     }).then(question =>{
         if(question != undefined){
-            res.render("question")
+            Answer.findAll({
+                where: {questionId:question.id},
+                order: [['id','DESC']]
+            }).then(answers => {
+                res.render("question",{
+                    question,
+                    answers,
+                    activeAsk: INACTIVE,
+                    activeHome: ACTIVE
+                })
+            })
+
         }else{
             res.redirect("/")
         }
+    })
+})
+
+app.post("/answer",(req,res)=>{
+    let content = req.body.content;
+    let question = req.body.question;
+    
+    Answer.create({
+        content: content,
+        questionId: question
+    }).then(()=>{
+        res.redirect("/question/"+question);
     })
 })
 

@@ -1,3 +1,44 @@
+:root{
+    --bs-blue:#2E86AB;
+}
+
 body{
     background-color: #EFCB68;
+}
+
+textarea{
+    resize: none;
+}
+
+.ans-head-container{
+    margin: 1.25rem 1rem 1rem 1rem;
+    border-top: 0.1rem solid black;
+    border-bottom: 0.1rem solid black;
+    color: #262626;
+}
+
+.card-wrapper{
+    border: 0.1rem solid #262626;
+}
+
+.ques-head-container{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    color: #262626;
+}
+
+.list-ans-container{
+    margin-top: 1rem;
+    padding: 1rem 1rem 0rem 1rem;
+    color: #262626;
+}
+
+.answer-container{
+    padding-left: 0.5rem;
+    border: 0.25rem solid black;
+}
+
+a,a:hover{
+    color: inherit;
 }
