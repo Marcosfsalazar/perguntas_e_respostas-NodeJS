@@ -5,3 +5,5 @@
   * Sequelize
   * Bootstrap
   * EJS
+
+  ![](./preview.png)
