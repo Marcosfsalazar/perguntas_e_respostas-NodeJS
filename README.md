@@ -1,3 +1,7 @@
 # perguntas_e_respostas-NodeJS
 
--> a simple nodejs application
+1. A simple nodeJS app, using:
+  *Express
+  *Sequelize
+  *Bootstrap
+  *EJS
